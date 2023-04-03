@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "beyond-the-hype-ds"
+version = "0.1.0"
+description = "Code from Beyond the Hype Data Science meetup."
+authors = ["Antony Nyagah"]
+readme = "README.md"
+packages = [{include = "beyond_the_hype_ds"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "^2.28.2"
+beautifulsoup4 = "^4.12.0"
+lxml = "^4.9.2"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
