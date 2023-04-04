@@ -1,3 +1,4 @@
+import pandas as pd
 import requests
 from bs4 import BeautifulSoup as bs
 
@@ -33,12 +34,44 @@ def inspect_jobs(jobs_list: list[dict]):
         job_description = job_info_boxes[0].text
         job_summary = job_info_boxes[1].text
 
-        # print(job_description)
-        # print(job_summary)
-        if "The role" in job_summary:
-            print("This is a good job")
+        # add the job summary and job description to the job dictionary
+        job["job_summary"] = job_summary
+        job["job_description"] = job_description
+
+    return jobs_list
+
+
+def check_for_keywords(jobs_list: list[dict], keywords: list[str]):
+    # check if the job summary or job description contains the keywords
+    # if it does, add the job to a new list
+    # return the new list
+    new_list = []
+    for job in jobs_list:
+        job_summary = job["job_summary"]
+        job_description = job["job_description"]
+        for keyword in keywords:
+            if keyword in job_summary or keyword in job_description:
+                new_list.append(job)
+                break
+
+    # turn the list of dictionaries into a pandas dataframe
+    # save the dataframe as a csv file
+    # only include the job title and the job link
+    jobs_df = pd.DataFrame(new_list)
+    jobs_df = jobs_df[["job_title", "job_link"]]
+    jobs_df.to_csv("jobs.csv", index=False)
 
 
 if __name__ == "__main__":
     scraped_data = job_scraper("https://www.myjobsinkenya.com/")
     job_info = inspect_jobs(scraped_data)
+    keywords = [
+        "python",
+        "django",
+        "flask",
+        "data science",
+        "data analyst",
+        "data science",
+        "software",
+    ]
+    keywords_jobs = check_for_keywords(job_info, keywords)
